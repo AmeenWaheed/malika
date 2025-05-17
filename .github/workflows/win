@@ -1,0 +1,23 @@
+name: Start Windows VPS with NoMachine Only
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Download NoMachine
+      run: |
+        Invoke-WebRequest -Uri "https://download.nomachine.com/download/8.11/Windows/nomachine_8.11.3_1_x64.exe" -OutFile "nx.exe"
+        Start-Process -FilePath ".\nx.exe" -ArgumentList "/S" -Wait
+
+    - name: Show IP Address and Credentials
+      run: |
+        $ip = (Invoke-WebRequest -Uri "http://ipinfo.io/ip").Content.Trim()
+        $user = $env:USERNAME
+        Write-Host "🔑 NoMachine Access Info:"
+        Write-Host "🌐 IP Address: $ip"
+        Write-Host "👤 Username: $user"
+        Write-Host "🔒 Password: Not set - You may need to set it manually"
